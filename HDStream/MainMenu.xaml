@@ -1,0 +1,125 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="HDStream.MainPage"
+     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:kor="clr-namespace:KoreanKeyboard;assembly=KoreanKeyboard"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit" 
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
+    shell:SystemTray.IsVisible="False">
+    <!--LayoutRoot contains the root grid where all other page content is placed-->
+    
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="800"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid MouseEnter="PanoramaRoot_MouseEnter" x:Name="PanoramaRoot">
+        <controls:Panorama Title="HDStream" Foreground="White" SelectionChanged="Panorama_SelectionChanged">
+            <controls:Panorama.Background>
+                <ImageBrush ImageSource="4193370268_3539ffb398_b2.jpg"/>
+            </controls:Panorama.Background>
+            <!--Panorama item one-->
+            <controls:PanoramaItem Header="social" Orientation="Horizontal">
+                <toolkit:WrapPanel x:Name="wrapPanel" Orientation="Horizontal">
+                	
+                </toolkit:WrapPanel>
+            </controls:PanoramaItem>
+            <controls:PanoramaItem Header="share">
+            	<Grid>
+                    <Border Height="135" VerticalAlignment="Top" Margin="14,0,3,0" Background="#B2FFFFFF" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                        <TextBlock x:Name="WatermarkTB" TextWrapping="Wrap" Text="What's on your mind?" VerticalAlignment="Top" Foreground="Gray" Margin="5,5,5,5" FontSize="23" />
+                    </Border>                    
+				<CheckBox Click="twitter_chk_Click" x:Name="twitter_chk" Content="Twitter" HorizontalAlignment="Left" Margin="2,146,0,0" VerticalAlignment="Top" Background="White" Foreground="White" />
+				<CheckBox Click="facebook_chk_Click" x:Name="facebook_chk" Content="Facebook" Margin="125,146,130,0" Background="White" Foreground="White"  d:LayoutOverrides="Width" VerticalAlignment="Top"/>
+				<CheckBox Click="me2day_chk_Click" x:Name="me2day_chk" Content="Me2day" HorizontalAlignment="Right" Margin="0,146,-6,0" Background="White" Foreground="White"  VerticalAlignment="Top"/>
+				<Path Fill="#B2FFFFFF" Stretch="Fill" Stroke="#FF000000" Data="M65,81.5 L65,101.82753 L45,81.5 C45,81.5 65,81.5 65,81.5 z" Margin="0,135,3,0" UseLayoutRounding="False" HorizontalAlignment="Right" Width="26.083" StrokeThickness="0" Height="20" VerticalAlignment="Top" d:LayoutOverrides="Height"/>
+				<Button x:Name="share" Content="Share" Margin="0,0,0,134" Background="Transparent" BorderBrush="White" Foreground="White" Click="share_Click" HorizontalAlignment="Left" Height="70" VerticalAlignment="Bottom"/>
+                 <Button x:Name="photo" Content="Add a picture" Margin="0,237,0,191" Background="Transparent" BorderBrush="White" Foreground="White" Click="photo_Click" HorizontalAlignment="Left" Height="70"/>                        
+				 <StackPanel x:Name="share_pg" Margin="60,0,68,130" Height="57" VerticalAlignment="Bottom" Visibility="Collapsed">
+				 	<ProgressBar Height="10"  VerticalAlignment="Bottom" Width="250" IsIndeterminate="True" x:Name="pg_upload"/>
+					<TextBlock Text="Upload in progress.. please wait" x:Name="wait_text"/>
+				 </StackPanel>
+                </Grid>
+            </controls:PanoramaItem>
+            <controls:PanoramaItem Header="notifications">
+                    <Grid>
+                        <ListBox x:Name="listdata" toolkit:TiltEffect.IsTiltEnabled="True" SelectionChanged="listdata_SelectionChanged">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+
+                                    <Grid Width="Auto" Height="Auto">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="60" />
+                                            <ColumnDefinition Width="400" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                            <Image Source="{Binding thumb_img}" Width="48" Height="48" VerticalAlignment="Top" HorizontalAlignment="Center"></Image>
+                                        </Grid>
+                                        <Grid Grid.Column="1">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding text}" TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}" FontSize="21" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="White"/>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding dstring}" TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}" FontSize="18" Foreground="White"/>
+                                                    <Image Source="{Binding type}" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"></Image>
+                                                </StackPanel>
+                                                <TextBlock Text="  " TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}" FontSize="15"/>
+                                            </StackPanel>
+                                        </Grid>                                        
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        
+                        <TextBlock x:Name="loadtext" Visibility="Collapsed" TextWrapping="Wrap" Height="27" VerticalAlignment="Top" Margin="8,179,8,0" TextAlignment="Center" d:LayoutOverrides="GridBox" Text="loading"/>
+                        <ProgressBar x:Name="pgbar" Visibility="Collapsed" Height="13" Margin="56,206,39,0" VerticalAlignment="Top" IsIndeterminate="True"/>
+                    </Grid>
+                </controls:PanoramaItem>
+            <!--Panorama item two-->
+            <controls:PanoramaItem Header="settings">
+                <Grid>
+                    <TextBlock Height="32" Margin="8,34,103,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="White" FontSize="22.667"><Run Text="Initialize all data"/></TextBlock>
+                    <Button Foreground="White" toolkit:TiltEffect.IsTiltEnabled="True" Content="Initialize" HorizontalAlignment="Left" Margin="0,66,0,0" VerticalAlignment="Top" BorderBrush="White" Click="Button_Click"/>
+                    <toolkit:ToggleSwitch Checked="toggle_Checked" Unchecked="toggle_Unchecked" x:Name="toggle" Margin="8,142,0,245" HorizontalAlignment="Left" Content="Off" Width="404" Background="White" Foreground="White" d:LayoutOverrides="Height"/>
+                    <TextBlock Margin="8,142,206,0" TextWrapping="Wrap" Text="Use on my location" VerticalAlignment="Top" Foreground="White" FontSize="21.333"/>
+                    <TextBlock MouseEnter="TextBlock_MouseEnter" Margin="8,242,0,211" TextWrapping="Wrap" HorizontalAlignment="Left" Width="156" TextDecorations="Underline" Foreground="White"><Run Text="P"/><Run Text="rivacy statement "/></TextBlock>
+                </Grid>
+            </controls:PanoramaItem>
+            <controls:PanoramaItem Header="information">
+                <Grid Height="600" ShowGridLines="True">
+                    <ScrollViewer VerticalScrollBarVisibility="Visible">
+                        <ScrollViewer.Content>
+                            <Grid Height="600" ShowGridLines="True">
+                                <TextBlock HorizontalAlignment="Left" Margin="28,47,0,0" TextWrapping="Wrap" Text="1.0" VerticalAlignment="Top" Foreground="Silver"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="8,91,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="26.667" Foreground="White" Text="Open API Statement"></TextBlock>
+                                <TextBlock HorizontalAlignment="Left" Margin="28,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Silver" RenderTransformOrigin="0.261,4.778" Text="Twitter, Facebook, Me2day OAuth"></TextBlock>
+                                <TextBlock HorizontalAlignment="Left" Margin="8,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="26.667" Foreground="White" Text="Developer"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="28,207,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Silver" RenderTransformOrigin="0.261,4.778" Text="HHDD Studio"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="28,288,0,285" TextWrapping="Wrap" Foreground="Silver" RenderTransformOrigin="0.261,4.778" Text="http://adnaru.com" d:LayoutOverrides="Height"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="28,0,0,258" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="Silver" RenderTransformOrigin="0.261,4.778" Text="hhdd@adnaru.com"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="28,0,0,231" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="Silver" RenderTransformOrigin="0.261,4.778" Text="@heedeok"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="8,245,0,217" TextWrapping="Wrap" FontSize="26.667" Foreground="White" Text="Contact Information" d:LayoutOverrides="Height"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="8,0,0,181" TextWrapping="Wrap" VerticalAlignment="Bottom" FontSize="26.667" Foreground="White" Text="Special Thanks to.."/>
+                                <TextBlock HorizontalAlignment="Left" Margin="24,0,0,155" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="Silver" RenderTransformOrigin="0.261,4.778" Text="Mom"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="24,0,0,128" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="Silver" RenderTransformOrigin="0.261,4.778" Text="TweetSharp Project team"/>                                
+                                <TextBlock FontSize="26.667" Foreground="White" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Version" /></TextBlock>
+                            </Grid>
+                        </ScrollViewer.Content>
+                    </ScrollViewer>
+                </Grid>
+            </controls:PanoramaItem>
+        </controls:Panorama>
+        </Grid>
+        <Grid Width="480" Height="339" VerticalAlignment="Bottom" d:LayoutOverrides="Height, VerticalMargin">
+            <kor:KeyBoard Foreground="White" x:Name="keyboard" Visibility="Collapsed" ContentChanged="keyboard_ContentChanged"/>
+        </Grid>
+    </Grid>
+</phone:PhoneApplicationPage>
